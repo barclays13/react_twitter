@@ -21,7 +21,8 @@ const App = () => {
         {label:"Going to learn react", important:true, id: "123"},
         {label:"That is so good" , important:false, id: "231"},
         {label:"A need a break...", important:false, id: "321"},
-        123
+        123,
+        ['123213', 123]
     ];
 
     return (
