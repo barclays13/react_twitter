@@ -43,13 +43,10 @@ export default class App extends Component {
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
-        this.onToggleImportant = this.onToggleImportant.bind(this);
-        this.onToggleLiked = this.onToggleLiked.bind(this);
         this.onUpdateSerach = this.onUpdateSerach.bind(this);
         this.onFilterSelect = this.onFilterSelect.bind(this);
+        this.onToggles = this.onToggles.bind(this);
     }
-
-
 
     filterPost(items, filter) {
         if (filter === 'like') {
@@ -80,42 +77,35 @@ export default class App extends Component {
     }
 
     addItem(body) {
-        const newItem = {
-            label: body,
-            important: false,
-            id: nextId()
-        }
-        this.setState(({data}) => {
-            const newArr = [...data, newItem];
-            return {
-                data: newArr
+        if (body.length > 0) {
+            const newItem = {
+                label: body,
+                important: false,
+                id: nextId()
             }
-        });
+            this.setState(({data}) => {
+                const newArr = [...data, newItem];
+                return {
+                    data: newArr
+                }
+            });
+        }
     }
 
-    onToggleImportant(id) {
+    onToggles(likeImportant, id) {
+
         this.setState(({data}) => {
             const index = data.findIndex(elem => elem.id === id);
             const old = data[index];
-            const nweItem = {...old, important: !old.important};
-            const newArr = [...data.slice (0, index), nweItem, ...data.slice (index+1)];
+            const newItem = {...old};
+            newItem[likeImportant] = !old[likeImportant];
+            const newArr = [...data.slice (0, index), newItem, ...data.slice (index+1)];
             return {
                 data: newArr
             }
         });
     }    
 
-    onToggleLiked(id) {
-        this.setState(({data}) => {
-            const index = data.findIndex(elem => elem.id === id);
-            const old = data[index];
-            const nweItem = {...old, like: !old.like};
-            const newArr = [...data.slice (0, index), nweItem, ...data.slice (index+1)];
-            return {
-                data: newArr
-            }
-        });
-    }
 
     onUpdateSerach(term){
         this.setState({term})
@@ -148,8 +138,8 @@ export default class App extends Component {
                 <PostList 
                     posts={visiblePosts}
                     onDelete={this.deleteItem}
-                    onToggleImportant={this.onToggleImportant}
-                    onToggleLiked={this.onToggleLiked}/>
+                    onToggles={this.onToggles}
+                />
                 <PostAddForm
                     onAdd={this.addItem}/>
             </AppBlock>
