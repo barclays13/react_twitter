@@ -77,7 +77,7 @@ export default class App extends Component {
     }
 
     addItem(body) {
-        if (body.length > 0) {
+        if (body.trim().length > 0) {
             const newItem = {
                 label: body,
                 important: false,
